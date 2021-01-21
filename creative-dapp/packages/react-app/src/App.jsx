@@ -11,6 +11,7 @@ import { useExchangePrice, useGasPrice, useUserProvider, useContractLoader, useC
 import { Header, Account, Faucet, Ramp, Contract, GasGauge } from "./components";
 import { Transactor } from "./helpers";
 import { formatEther } from "@ethersproject/units";
+import { INFURA_ID, LINK_ADDRESS, LINK_ABI } from "./constants";
 //import Hints from "./Hints";
 import { Hints, ExampleUI, Subgraph } from "./views"
 /*
@@ -31,8 +32,6 @@ import { Hints, ExampleUI, Subgraph } from "./views"
     You can also bring in contract artifacts in `constants.js`
     (and then use the `useExternalContractLoader()` hook!)
 */
-import { INFURA_ID, DAI_ADDRESS, DAI_ABI } from "./constants";
-
 // 😬 Sorry for all the console logging 🤡
 const DEBUG = true
 
@@ -89,12 +88,15 @@ function App(props) {
   if(DEBUG) console.log("🔐 writeContracts",writeContracts)
 
   // EXTERNAL CONTRACT EXAMPLE:
-  //
+  const LinkToken = useExternalContractLoader(userProvider, LINK_ADDRESS, LINK_ABI)
+  const externalContracts = ({LinkToken: LinkToken})
+
   // If you want to bring in the mainnet DAI contract it would look like:
   //const mainnetDAIContract = useExternalContractLoader(mainnetProvider, DAI_ADDRESS, DAI_ABI)
-  //console.log("🥇DAI contract on mainnet:",mainnetDAIContract)
+  console.log("🥇LINK contract on mainnet:", LinkToken)
   //
   // Then read your DAI balance like:
+  const myMainnetBalance = useContractReader({LINK: LinkToken},"LINK", "balanceOf",["0xc5310ec98bEdf6F3eab6562Fa8a5530062a996Bc"])
   //const myMainnetBalance = useContractReader({DAI: mainnetDAIContract},"DAI", "balanceOf",["0x34aA3F359A9D614239015126635CE7732c18fDF3"])
   //
 
