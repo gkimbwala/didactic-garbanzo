@@ -1,14 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
+import { useAsyncEffect } from 'use-async-effect';
 
 export default function usePoller(fn, delay, extraWatch) {
   const savedCallback = useRef();
   // Remember the latest fn.
-  useEffect(() => {
+  useAsyncEffect(() => {
     savedCallback.current = fn;
   }, [fn]);
   // Set up the interval.
   // eslint-disable-next-line consistent-return
-  useEffect(() => {
+  useAsyncEffect(() => {
     console.log("tick")
     function tick() {
       savedCallback.current();
@@ -19,7 +20,7 @@ export default function usePoller(fn, delay, extraWatch) {
     }
   }, [delay]);
   // run at start too
-  useEffect(() => {
+  useAsyncEffect(() => {
     fn();
   },[ extraWatch ]);
 }
